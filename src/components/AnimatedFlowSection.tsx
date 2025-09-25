@@ -65,7 +65,11 @@ const AnimatedFlowSection = () => {
     if (!isPlaying || prefersReducedMotion || hoveredStep !== null) return;
 
     const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % steps.length);
+      setActiveStep((prev) => {
+        const next = (prev + 1) % steps.length;
+        if (next === 0) setCycleKey((k) => k + 1); // restart progress instantly at wrap
+        return next;
+      });
     }, 1667); // Sped up by 1.5x: 2500ms / 1.5 = 1667ms per step
 
     return () => clearInterval(interval);
