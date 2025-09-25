@@ -298,14 +298,14 @@ const AnimatedFlowSection = () => {
               </div>
 
               {/* Step labels below the progress */}
-              <div className="flex items-start justify-between mt-12 px-32">
+              <div className="grid grid-cols-4 place-items-center mt-12 px-32 gap-x-8">
                 {steps.map((step, index) => {
                   const isActive = activeStep === index;
                   
                   return (
                     <motion.div
                       key={index}
-                      className="text-center max-w-[140px]"
+                      className="text-center w-full flex flex-col items-center"
                       animate={{
                         opacity: isActive ? 1 : 0.7,
                         y: isActive ? -4 : 0,
