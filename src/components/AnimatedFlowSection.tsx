@@ -114,7 +114,7 @@ const AnimatedFlowSection = () => {
         <div className="hidden lg:block">
           <div className="relative">
             {/* Step cards */}
-            <div className="flex items-center justify-between relative mb-16">
+            <div className="flex items-center justify-between relative mb-16 px-24">
               {steps.map((step, index) => {
                 const IconComponent = step.icon;
                 const isActive = activeStep === index;
