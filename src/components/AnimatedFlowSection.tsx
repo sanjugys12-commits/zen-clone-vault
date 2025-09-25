@@ -63,7 +63,7 @@ const AnimatedFlowSection = () => {
 
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 2500); // 10s total / 4 steps = 2.5s per step
+    }, 1667); // Sped up by 1.5x: 2500ms / 1.5 = 1667ms per step
 
     return () => clearInterval(interval);
   }, [isPlaying, prefersReducedMotion, hoveredStep, steps.length]);
@@ -200,7 +200,7 @@ const AnimatedFlowSection = () => {
                       width: `${((activeStep + 1) / steps.length) * 100}%`,
                     }}
                     transition={{ 
-                      duration: prefersReducedMotion ? 0 : 2.0, 
+                      duration: prefersReducedMotion ? 0 : 1.33, 
                       ease: [0.4, 0, 0.2, 1]
                     }}
                   />
@@ -213,10 +213,10 @@ const AnimatedFlowSection = () => {
                         x: [`-64px`, `${((activeStep + 1) / steps.length) * 100}%`],
                       }}
                       transition={{
-                        duration: 2.0,
+                        duration: 1.33,
                         ease: [0.4, 0, 0.2, 1],
                         repeat: Infinity,
-                        repeatDelay: 0.5
+                        repeatDelay: 0.33
                       }}
                     />
                   )}
@@ -341,7 +341,7 @@ const AnimatedFlowSection = () => {
                     height: `${((activeStep + 1) / steps.length) * 100}%`,
                   }}
                   transition={{ 
-                    duration: prefersReducedMotion ? 0 : 2.0, 
+                    duration: prefersReducedMotion ? 0 : 1.33, 
                     ease: [0.4, 0, 0.2, 1]
                   }}
                 />
@@ -354,10 +354,10 @@ const AnimatedFlowSection = () => {
                       y: [`-32px`, `${((activeStep + 1) / steps.length) * 100}%`],
                     }}
                     transition={{
-                      duration: 2.0,
+                      duration: 1.33,
                       ease: [0.4, 0, 0.2, 1],
                       repeat: Infinity,
-                      repeatDelay: 0.5
+                      repeatDelay: 0.33
                     }}
                   />
                 )}
