@@ -186,10 +186,10 @@ const AnimatedFlowSection = () => {
             </div>
 
             {/* Sophisticated Progress Flow */}
-            <div className="relative mt-12">
+            <div className="relative mt-16">
               {/* Background track - more visible */}
-              <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 px-24">
-                <div className="flex-1 h-2 bg-gray-200 rounded-full relative overflow-hidden shadow-inner">
+              <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 px-32">
+                <div className="flex-1 h-3 bg-gray-200 rounded-full relative overflow-hidden shadow-inner">
                   {/* Animated gradient progress */}
                   <motion.div
                     className="absolute top-0 left-0 h-full rounded-full shadow-sm"
@@ -224,7 +224,7 @@ const AnimatedFlowSection = () => {
               </div>
 
               {/* Connection nodes - more visible */}
-              <div className="flex items-center justify-between relative z-10 px-24">
+              <div className="flex items-center justify-between relative z-10 px-32">
                 {steps.map((_, index) => {
                   const isActive = activeStep === index;
                   const isPassed = activeStep > index;
@@ -233,7 +233,7 @@ const AnimatedFlowSection = () => {
                     <div key={index} className="relative">
                       {/* Node - larger and more colorful */}
                       <motion.div
-                        className="w-8 h-8 rounded-full border-4 border-white shadow-lg relative bg-white"
+                        className="w-10 h-10 rounded-full border-4 border-white shadow-lg relative bg-white"
                         animate={{
                           backgroundColor: isPassed || isActive 
                             ? index === 0 ? '#3b82f6' 
@@ -241,19 +241,19 @@ const AnimatedFlowSection = () => {
                             : index === 2 ? '#8b5cf6' 
                             : '#14b8a6'
                             : '#e5e7eb',
-                          scale: isActive ? 1.4 : 1,
+                          scale: isActive ? 1.3 : 1,
                           boxShadow: isActive 
-                            ? '0 0 20px rgba(59, 130, 246, 0.5)' 
-                            : '0 4px 8px rgba(0, 0, 0, 0.1)',
+                            ? '0 0 25px rgba(59, 130, 246, 0.6)' 
+                            : '0 4px 12px rgba(0, 0, 0, 0.15)',
                         }}
                         transition={{ duration: 0.3, type: "spring" }}
                       >
                         {/* Pulsing ring for active step - more visible */}
                         {isActive && !prefersReducedMotion && (
                           <motion.div
-                            className="absolute inset-0 rounded-full border-3 border-blue-400"
+                            className="absolute inset-0 rounded-full border-4 border-blue-400"
                             animate={{
-                              scale: [1, 2, 1],
+                              scale: [1, 2.2, 1],
                               opacity: [0.8, 0, 0.8],
                             }}
                             transition={{
@@ -298,7 +298,7 @@ const AnimatedFlowSection = () => {
               </div>
 
               {/* Step labels below the progress */}
-              <div className="flex items-center justify-between mt-8 px-24">
+              <div className="flex items-start justify-between mt-12 px-32">
                 {steps.map((step, index) => {
                   const isActive = activeStep === index;
                   
