@@ -114,7 +114,7 @@ const AnimatedFlowSection = () => {
         <div className="hidden lg:block">
           <div className="relative">
             {/* Step cards */}
-            <div className="flex items-center justify-between relative mb-16 px-24">
+            <div className="grid grid-cols-4 place-items-center relative mb-16 px-32 gap-x-8">
               {steps.map((step, index) => {
                 const IconComponent = step.icon;
                 const isActive = activeStep === index;
@@ -224,7 +224,7 @@ const AnimatedFlowSection = () => {
               </div>
 
               {/* Connection nodes - more visible */}
-              <div className="flex items-center justify-between relative z-10 px-32">
+              <div className="grid grid-cols-4 place-items-center relative z-10 px-32">
                 {steps.map((_, index) => {
                   const isActive = activeStep === index;
                   const isPassed = activeStep > index;
