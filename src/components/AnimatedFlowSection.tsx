@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Users, Send, MessageCircle, Play, Pause } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,9 @@ const AnimatedFlowSection = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  const [cycleKey, setCycleKey] = useState(0);
+  const prevStepRef = useRef(0);
 
   const steps = [
     {
@@ -67,6 +70,15 @@ const AnimatedFlowSection = () => {
 
     return () => clearInterval(interval);
   }, [isPlaying, prefersReducedMotion, hoveredStep, steps.length]);
+
+  // Restart progress bar at cycle boundary (prevent reverse animation)
+  useEffect(() => {
+    const prev = prevStepRef.current;
+    if (prev === steps.length - 1 && activeStep === 0) {
+      setCycleKey((k) => k + 1);
+    }
+    prevStepRef.current = activeStep;
+  }, [activeStep, steps.length]);
 
   const handleStepHover = (index: number | null) => {
     setHoveredStep(index);
@@ -192,10 +204,12 @@ const AnimatedFlowSection = () => {
                 <div className="flex-1 h-3 bg-gray-200 rounded-full relative overflow-hidden shadow-inner">
                   {/* Animated gradient progress */}
                   <motion.div
+                    key={cycleKey}
                     className="absolute top-0 left-0 h-full rounded-full shadow-sm"
                     style={{
                       background: 'linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #14b8a6 100%)'
                     }}
+                    initial={{ width: 0 }}
                     animate={{
                       width: `${((activeStep + 1) / steps.length) * 100}%`,
                     }}
@@ -207,7 +221,7 @@ const AnimatedFlowSection = () => {
                   
                   {/* Animated shimmer effect */}
                   {!prefersReducedMotion && (
-                    <motion.div
+                    <motion.div key={cycleKey}
                       className="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-full"
                       animate={{
                         x: [`-64px`, `${((activeStep + 1) / steps.length) * 100}%`],
@@ -336,7 +350,9 @@ const AnimatedFlowSection = () => {
               <div className="absolute left-8 top-8 bottom-8 w-1 bg-gray-100 rounded-full overflow-hidden">
                 {/* Animated vertical progress */}
                 <motion.div
+                  key={cycleKey}
                   className="absolute top-0 left-0 w-full bg-gradient-to-b from-blue-500 via-purple-500 to-teal-500 rounded-full"
+                  initial={{ height: 0 }}
                   animate={{
                     height: `${((activeStep + 1) / steps.length) * 100}%`,
                   }}
@@ -348,7 +364,7 @@ const AnimatedFlowSection = () => {
                 
                 {/* Animated glow effect */}
                 {!prefersReducedMotion && (
-                  <motion.div
+                  <motion.div key={cycleKey}
                     className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-transparent via-white to-transparent opacity-30 rounded-full"
                     animate={{
                       y: [`-32px`, `${((activeStep + 1) / steps.length) * 100}%`],
