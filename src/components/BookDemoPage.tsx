@@ -37,7 +37,6 @@ const formSchema = z.object({
       return !personalDomains.includes(domain);
     }, 'Please use a business email address'),
   company_name: z.string().min(2, 'Company name must be at least 2 characters'),
-  job_title: z.string().optional(),
   country_code: z.object({
     name: z.string(),
     code: z.string(),
@@ -46,7 +45,6 @@ const formSchema = z.object({
   }).optional(),
   phone_number: z.string().optional(),
   linkedin_accounts_needed: z.string().min(1, 'Please select number of accounts needed'),
-  monthly_outreach_goal: z.string().optional(),
   timeline_to_start: z.string().min(1, 'Please select your timeline'),
 });
 
@@ -64,11 +62,9 @@ const BookDemoPage = () => {
       full_name: '',
       work_email: '',
       company_name: '',
-      job_title: '',
       country_code: selectedCountry,
       phone_number: '',
       linkedin_accounts_needed: '',
-      monthly_outreach_goal: '',
       timeline_to_start: '',
     },
   });
@@ -84,13 +80,11 @@ const BookDemoPage = () => {
       formData.append('full_name', values.full_name);
       formData.append('work_email', values.work_email);
       formData.append('company_name', values.company_name);
-      formData.append('job_title', values.job_title || '');
       const fullPhoneNumber = values.country_code && values.phone_number 
         ? `${values.country_code.dialCode} ${values.phone_number}`
         : values.phone_number || '';
       formData.append('phone_number', fullPhoneNumber);
       formData.append('linkedin_accounts_needed', values.linkedin_accounts_needed);
-      formData.append('monthly_outreach_goal', values.monthly_outreach_goal || '');
       formData.append('timeline_to_start', values.timeline_to_start);
       
       // Submit to Formspree
@@ -254,8 +248,8 @@ const BookDemoPage = () => {
                 />
               </div>
 
-              {/* Row 2: Company and Job Title */}
-              <div className="grid md:grid-cols-2 gap-6">
+              {/* Row 2: Company Name (full width) */}
+              <div>
                 <FormField
                   control={form.control}
                   name="company_name"
@@ -271,31 +265,6 @@ const BookDemoPage = () => {
                         >
                           <Input
                             placeholder="Acme Inc."
-                            className="transition-all duration-200"
-                            {...field}
-                          />
-                        </motion.div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="job_title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-900 font-medium">
-                        Job Title
-                      </FormLabel>
-                      <FormControl>
-                        <motion.div
-                          whileFocus={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Input
-                            placeholder="CEO, Sales Director, etc."
                             className="transition-all duration-200"
                             {...field}
                           />
@@ -378,33 +347,8 @@ const BookDemoPage = () => {
                 />
               </div>
 
-              {/* Row 4: Outreach Goal and Timeline */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="monthly_outreach_goal"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-900 font-medium">
-                        Monthly Outreach Goal
-                      </FormLabel>
-                      <FormControl>
-                        <motion.div
-                          whileFocus={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Input
-                            placeholder="e.g., 1000 prospects per month"
-                            className="transition-all duration-200"
-                            {...field}
-                          />
-                        </motion.div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+              {/* Row 4: Timeline */}
+              <div>
                 <FormField
                   control={form.control}
                   name="timeline_to_start"
