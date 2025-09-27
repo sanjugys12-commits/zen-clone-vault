@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import { CountryCodeSelector, Country, getDefaultCountry } from './CountryCodeSelector';
 
 const formSchema = z.object({
   full_name: z.string().min(2, 'Full name must be at least 2 characters'),
@@ -37,6 +38,12 @@ const formSchema = z.object({
     }, 'Please use a business email address'),
   company_name: z.string().min(2, 'Company name must be at least 2 characters'),
   job_title: z.string().optional(),
+  country_code: z.object({
+    name: z.string(),
+    code: z.string(),
+    dialCode: z.string(),
+    flag: z.string(),
+  }).optional(),
   phone_number: z.string().optional(),
   linkedin_accounts_needed: z.string().min(1, 'Please select number of accounts needed'),
   monthly_outreach_goal: z.string().optional(),
@@ -48,6 +55,7 @@ type FormData = z.infer<typeof formSchema>;
 const BookDemoPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country>(getDefaultCountry());
   const { toast } = useToast();
   
   const form = useForm<FormData>({
@@ -57,6 +65,7 @@ const BookDemoPage = () => {
       work_email: '',
       company_name: '',
       job_title: '',
+      country_code: selectedCountry,
       phone_number: '',
       linkedin_accounts_needed: '',
       monthly_outreach_goal: '',
@@ -76,7 +85,10 @@ const BookDemoPage = () => {
       formData.append('work_email', values.work_email);
       formData.append('company_name', values.company_name);
       formData.append('job_title', values.job_title || '');
-      formData.append('phone_number', values.phone_number || '');
+      const fullPhoneNumber = values.country_code && values.phone_number 
+        ? `${values.country_code.dialCode} ${values.phone_number}`
+        : values.phone_number || '';
+      formData.append('phone_number', fullPhoneNumber);
       formData.append('linkedin_accounts_needed', values.linkedin_accounts_needed);
       formData.append('monthly_outreach_goal', values.monthly_outreach_goal || '');
       formData.append('timeline_to_start', values.timeline_to_start);
@@ -297,31 +309,42 @@ const BookDemoPage = () => {
 
               {/* Row 3: Phone and LinkedIn Accounts */}
               <div className="grid md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="phone_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-900 font-medium">
-                        Phone Number
-                      </FormLabel>
-                      <FormControl>
-                        <motion.div
-                          whileFocus={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Input
-                            type="tel"
-                            placeholder="+1 (555) 123-4567"
-                            className="transition-all duration-200"
-                            {...field}
-                          />
-                        </motion.div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormLabel className="text-gray-900 font-medium mb-3 block">
+                    Phone Number
+                  </FormLabel>
+                  <div className="flex gap-2">
+                    <CountryCodeSelector
+                      selectedCountry={selectedCountry}
+                      onCountryChange={(country) => {
+                        setSelectedCountry(country);
+                        form.setValue('country_code', country);
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="phone_number"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <motion.div
+                              whileFocus={{ scale: 1.02 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Input
+                                type="tel"
+                                placeholder="123-456-7890"
+                                className="transition-all duration-200"
+                                {...field}
+                              />
+                            </motion.div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
 
                 <FormField
                   control={form.control}
